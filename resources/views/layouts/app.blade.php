@@ -14,6 +14,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -85,14 +87,63 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script>
         $(function() {
-            $( "#date1" ).datepicker();
-            $( "#date2" ).datepicker();
+            // Datepicker
+            $( "#salesDate1" ).datepicker();
+            $( "#salesDate2" ).datepicker();
+            $( "#serviceDate1" ).datepicker();
+            $( "#serviceDate2" ).datepicker();
+            // end Datepicker
 
-            $('#table_id').dataTable();
+            // definations of Datatable
+            var datatableObj = $("#table_id").DataTable({
+                data:[],
+                rowCallback: function (row, data) {},
+                    filter: false,
+                    info: false,
+                    ordering: false,
+                    processing: true,
+                    retrieve: true
+            });
+
+            $("#submitSalesQuery").on("click", function (event) {
+                $.get("http://170.168.21.55/api/testJson", function(result) {
+                    datatableObj.clear().draw();
+                    datatableObj.rows.add(result).draw();
+                });
+            });
+
+            $("#submitServiceQuery").on("click", function (event) {
+                $.get("http://170.168.21.55/api/testServiceJson", function(result) {
+                    datatableObj.clear().draw();
+                    datatableObj.rows.add(result).draw();
+                });
+            });
+            // end definations of Datatable
+
+            // event for Save Report
+            $("#saveReport").on("click", function() {
+                var url = "http://170.168.21.55/api/testJson";
+
+                $.get(, function(result) {
+                    var csvContent = "data:text/csv;charset=utf-8,";
+                    result.forEach(function(infoArray, index) {
+
+                       dataString = infoArray.join(",");
+                       csvContent += index < result.length ? dataString+ "\n" : dataString;
+
+                    });
+
+                    var encodedUri = encodeURI(csvContent);
+                    window.open(encodedUri);
+                });
+            });
+            // end event for Save Report
+
         });
     </script>
 </body>

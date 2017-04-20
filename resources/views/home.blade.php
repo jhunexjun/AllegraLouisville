@@ -35,18 +35,18 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="date1" type="text" class="form-control" placeholder="Date 1" value="" />
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input id="salesDate1" type="text" class="form-control" placeholder="Date 1" value="" />
+                                </div>
+                            </div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="date2" type="text" class="form-control" placeholder="Date 1" value="" />
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div><!-- /.row -->
+                                    <input id="salesDate2" type="text" class="form-control" placeholder="Date 1" value="" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="row"><br>
                             <div class="col-lg-3">Option Label 1</div>
                             <div class="col-lg-3">
@@ -67,10 +67,11 @@
                         </div>
                         <div class="row"><hr>
                             <div class="col-lg-3">
-                                <button type="button" class="btn btn-primary">Submit</button>
+                                <button id="submitSalesQuery" type="button" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </div>
+
                     <div role="tabpanel" class="tab-pane" id="serviceDataTab">
                         <h4><strong>Service Data Filters</strong></h4><br>
                         <div class="row">
@@ -80,24 +81,24 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="date1" type="text" class="form-control" placeholder="Date 1" value="" />
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
+                                    <input id="serviceDate1" type="text" class="form-control" placeholder="Date 1" value="" />
+                                </div>
+                            </div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="date2" type="text" class="form-control" placeholder="Date 1" value="" />
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                        </div><!-- /.row -->
+                                    <input id="serviceDate2" type="text" class="form-control" placeholder="Date 1" value="" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="row"><br>
                             <div class="col-lg-3">Option Label 1</div>
                             <div class="col-lg-3">
                                 <select class="form-control">
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
+                                    <option>Service Option 1</option>
+                                    <option>Service Option 2</option>
                                 </select>
                             </div>
                         </div>
@@ -105,14 +106,14 @@
                             <div class="col-lg-3">Option Label 2</div>
                             <div class="col-lg-3">
                                 <select class="form-control">
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
+                                    <option>Service Option 1</option>
+                                    <option>Service Option 2</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row"><hr>
                             <div class="col-lg-3">
-                                <button type="button" class="btn btn-primary">Submit</button>
+                                <button id="submitServiceQuery" type="button" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -123,7 +124,7 @@
     <div class="row"><hr>
         <div class="col-md-12">
             <span id="recordsFound">0</span> records found.
-            <button type="button" class="btn btn-primary pull-right">Save Report</button>
+            <button id="saveReport" type="button" class="btn btn-primary pull-right">Save Report</button>
 
             <table id="table_id" class="display" cellspacing="5" width="100%">
                 <thead>
