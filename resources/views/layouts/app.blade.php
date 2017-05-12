@@ -87,7 +87,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!-- <script src="//code.jquery.com/jquery-1.10.2.min.js"></script> -->
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script>
@@ -111,14 +111,14 @@
             });
 
             $("#submitSalesQuery").on("click", function (event) {
-                $.get("http://170.168.21.55/api/testJson", function(result) {
+                $.get("{{ Request::root() }}/api/testJson", function(result) {
                     datatableObj.clear().draw();
                     datatableObj.rows.add(result).draw();
                 });
             });
 
             $("#submitServiceQuery").on("click", function (event) {
-                $.get("http://170.168.21.55/api/testServiceJson", function(result) {
+                $.get("{{ Request::root() }}/api/testServiceJson", function(result) {
                     datatableObj.clear().draw();
                     datatableObj.rows.add(result).draw();
                 });
@@ -129,7 +129,7 @@
             $("#saveReport").on("click", function() {
                 var url = "http://170.168.21.55/api/testJson";
 
-                $.get(, function(result) {
+                $.get(url, function(result) {
                     var csvContent = "data:text/csv;charset=utf-8,";
                     result.forEach(function(infoArray, index) {
 
