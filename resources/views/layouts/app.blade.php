@@ -38,7 +38,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/home') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
@@ -54,7 +54,6 @@
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -63,6 +62,10 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
+                                        @if (Auth::user()->admin)
+                                            <a href="{{ route('register') }}">Add user</a>
+                                        @endif
+
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -99,9 +102,17 @@
             $( "#serviceDate2" ).datepicker();
             // end Datepicker
 
-            // definations of Datatable
+            // definitions of Datatable
             var datatableObj = $("#table_id").DataTable({
                 data:[],
+                columns: [
+                    { data: 'APR' },
+                    { data: 'AccountingAccount' },
+                    { data: 'AccountingDate' },
+                    { data: 'Address' },
+                    { data: 'AccountingDate' },
+                    { data: 'Address' },
+                ],
                 rowCallback: function (row, data) {},
                     filter: false,
                     info: false,
@@ -112,8 +123,9 @@
 
             $("#submitSalesQuery").on("click", function (event) {
                 $.get("{{ Request::root() }}/api/testJson", function(result) {
+                    console.log("result: ", result);
                     datatableObj.clear().draw();
-                    datatableObj.rows.add(result).draw();
+                    datatableObj.rows.add(result.FISalesClosed).draw();
                 });
             });
 
@@ -123,8 +135,9 @@
                     datatableObj.rows.add(result).draw();
                 });
             });
-            // end definations of Datatable
+            // end definitions of Datatable
 
+            
             // event for Save Report
             $("#saveReport").on("click", function() {
                 var url = "http://170.168.21.55/api/testJson";
