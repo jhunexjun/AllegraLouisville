@@ -35,7 +35,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="salesDate1" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="salesStartDate" type="text" class="form-control" placeholder="Date 1" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -81,7 +81,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="serviceDate1" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="Date 1" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -89,7 +89,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="serviceDate2" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="Date 1" value="" />
                                 </div>
                             </div>
                         </div>
@@ -122,32 +122,11 @@
         </div>
     </div>
     <div class="row"><hr>
-        <div class="col-md-12">
-            <span id="recordsFound">0</span> records found.
-            <button id="saveReport" type="button" class="btn btn-primary pull-right">Save Report</button>
+        <div class="col-md-12"><div id="loader" class=""></div>
+            <span id="recordsFound">0</span> record(s) found.
+            <button id="dlSalesReport" type="button" class="btn btn-primary pull-right">Download Report</button>
 
-            <table id="table_id" class="display" cellspacing="5" width="100%">
-                <thead>
-                    <tr>
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>Position</th>
-                        <th>Address</th>
-                        <th>Birthday</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>Position</th>
-                        <th>Address</th>
-                        <th>Birthday</th>
-                        <th>Salary</th>
-                    </tr>
-                </tfoot>    
-            </table>
+            <div id="tableDiv"></div>
         </div>
     </div>
 </div>

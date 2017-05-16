@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TestJsonController extends Controller
+class salesController extends Controller
 {
-    public function getTestJson() {
+    public function getSalesData(Request $request) {
+        if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))
+            return response()->json(['error' => 1, 'message' => 'tart and end date.']);
+
+        $salesStartDate = $request->input('salesStartDate');
+        $salesEndDate = $request->input('salesEndDate');
+
         $client = new \GuzzleHttp\Client();
         $res = $client->request('POST', 'https://uat-3pa.dmotorworks.com/pip-extract/fisales-closed/extract', [
             'auth' => ['advantageconcepts', '8XnIEitP78vE'],
             'form_params' => [
-                'qparamStartDate' => '01/01/2012',
-                'qparamEndDate' => '01/03/2012',
+                'qparamStartDate' => $salesStartDate,
+                'qparamEndDate' => $salesEndDate,
                 'dealerId' => '3PAACONCEPTSDEV1',
                 'queryId' => 'FISC_DateRange',
             ]

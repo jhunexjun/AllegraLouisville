@@ -14,8 +14,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
-    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -96,66 +94,115 @@
     <script>
         $(function() {
             // Datepicker
-            $( "#salesDate1" ).datepicker();
+            $( "#salesStartDate" ).datepicker();
             $( "#salesDate2" ).datepicker();
-            $( "#serviceDate1" ).datepicker();
-            $( "#serviceDate2" ).datepicker();
+            $( "#serviceStartDate" ).datepicker();
+            $( "#serviceEndDate" ).datepicker();
             // end Datepicker
 
-            // definitions of Datatable
-            var datatableObj = $("#table_id").DataTable({
-                data:[],
-                columns: [
-                    { data: 'APR' },
-                    { data: 'AccountingAccount' },
-                    { data: 'AccountingDate' },
-                    { data: 'Address' },
-                    { data: 'AccountingDate' },
-                    { data: 'Address' },
-                ],
-                rowCallback: function (row, data) {},
-                    filter: false,
-                    info: false,
-                    ordering: false,
-                    processing: true,
-                    retrieve: true
-            });
-
+            // Sales query
             $("#submitSalesQuery").on("click", function (event) {
-                $.get("{{ Request::root() }}/api/testJson", function(result) {
-                    console.log("result: ", result);
-                    datatableObj.clear().draw();
-                    datatableObj.rows.add(result.FISalesClosed).draw();
+                $('#loader').addClass('loader');
+                $('#recordsFound').text("0");
+                var salesStartDate = $( "#salesStartDate" ).val();
+                var salesEndDate = $( "#salesDate2" ).val();
+
+                if (!salesStartDate || !salesEndDate) {
+                    $('#loader').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#salesStartDate" ).focus();
+                    return;
+                }
+
+                var queryParams = "salesStartDate=" + salesStartDate + "&salesEndDate=" + salesEndDate;
+
+                $.get("{{ Request::root() }}/api/sales?" + queryParams, function(result) {
+                    if (!result.FISalesClosed) {
+                        $('#loader').removeClass('loader');
+                        alert ('No data available.');
+                        return;
+                    }
+
+                    if (result.error) {
+                        $('#loader').removeClass('loader');
+                        alert(result.message);
+                        $( "#salesStartDate" ).focus();
+                        return;
+                    }
+
+                    var tableHeaders = '', columns = [];
+
+                    $.each(result.FISalesClosed[0], function(key, val){
+                        tableHeaders += "<th>" + key + "</th>";
+                        columns.push({data: key});
+                    });
+
+                    $("#tableDiv").empty();
+                    $("#tableDiv").append('<table id="displayTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
+                    var dtConstructorObj = {
+                                            "scrollX": true,
+                                            "columns": columns,
+                                            rowCallback: function (row, data) {},
+                                            filter: false,
+                                            info: false,
+                                            ordering: false,
+                                            processing: true,
+                                            retrieve: true,
+                                        };
+
+                    var displayTable = $("#displayTable").DataTable(dtConstructorObj);
+
+                    displayTable.clear().draw();
+                    displayTable.rows.add(result.FISalesClosed).draw();
+
+                    $('#recordsFound').text(displayTable.rows().data().length);
+
+                    $('#loader').removeClass('loader');
                 });
             });
 
+            // event for download sales report
+            $("#dlSalesReport").on("click", function() {
+                var salesTable = $("#displayTable").DataTable();
+                var csvContent = "data:text/csv;charset=utf-8,";
+
+                // get the columns
+                var columns = salesTable.data()[0];
+
+                $.each(columns, function(key, value) {
+                    csvContent += key + ',';
+                });
+
+                csvContent = csvContent.substring(0, csvContent.length - 1);    // remove the the last character, i.e. ","
+                csvContent += "\r\n";
+
+                var data = salesTable.data();
+                $.each(data, function(key, value) {
+                    $.each(value, function(key, value) {
+                        // In their API, if the value is an object, means null value
+                        if (typeof value != "object")
+                            csvContent += "\"" + value + "\"";
+
+                        csvContent += ",";
+                    });
+
+                    csvContent = csvContent.substring(0, csvContent.length - 1);
+                    csvContent += "\r\n";
+                });
+
+                var encodedUri = encodeURI(csvContent);
+                window.open(encodedUri);
+            }); // end event for download sales report
+
+
+            // Service query
             $("#submitServiceQuery").on("click", function (event) {
                 $.get("{{ Request::root() }}/api/testServiceJson", function(result) {
                     datatableObj.clear().draw();
                     datatableObj.rows.add(result).draw();
                 });
             });
-            // end definitions of Datatable
 
-            
-            // event for Save Report
-            $("#saveReport").on("click", function() {
-                var url = "http://170.168.21.55/api/testJson";
-
-                $.get(url, function(result) {
-                    var csvContent = "data:text/csv;charset=utf-8,";
-                    result.forEach(function(infoArray, index) {
-
-                       dataString = infoArray.join(",");
-                       csvContent += index < result.length ? dataString+ "\n" : dataString;
-
-                    });
-
-                    var encodedUri = encodeURI(csvContent);
-                    window.open(encodedUri);
-                });
-            });
-            // end event for Save Report
 
         });
     </script>
