@@ -15,11 +15,11 @@ class salesController extends Controller
 
         $client = new \GuzzleHttp\Client();
         $res = $client->request('POST', 'https://uat-3pa.dmotorworks.com/pip-extract/fisales-closed/extract', [
-            'auth' => ['advantageconcepts', '8XnIEitP78vE'],
+            'auth' => [config('app.dms_username'), config('app.dms_password')],
             'form_params' => [
                 'qparamStartDate' => $salesStartDate,
                 'qparamEndDate' => $salesEndDate,
-                'dealerId' => '3PAACONCEPTSDEV1',
+                'dealerId' => config('app.dms_dealerId'),
                 'queryId' => 'FISC_DateRange',
             ]
         ]);

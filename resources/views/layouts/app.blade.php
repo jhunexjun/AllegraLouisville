@@ -95,17 +95,22 @@
         $(function() {
             // Datepicker
             $( "#salesStartDate" ).datepicker();
-            $( "#salesDate2" ).datepicker();
+            $( "#salesEndDate" ).datepicker();
             $( "#serviceStartDate" ).datepicker();
             $( "#serviceEndDate" ).datepicker();
             // end Datepicker
+
+            var dlSalesReportBtn = $("#dlSalesReportBtn");
 
             // Sales query
             $("#submitSalesQuery").on("click", function (event) {
                 $('#loader').addClass('loader');
                 $('#recordsFound').text("0");
+                $("#tableDiv").empty();
+                dlSalesReportBtn.addClass("disabled");
+
                 var salesStartDate = $( "#salesStartDate" ).val();
-                var salesEndDate = $( "#salesDate2" ).val();
+                var salesEndDate = $( "#salesEndDate" ).val();
 
                 if (!salesStartDate || !salesEndDate) {
                     $('#loader').removeClass('loader');
@@ -130,15 +135,27 @@
                         return;
                     }
 
-                    var tableHeaders = '', columns = [];
+                    var tableHeaders = '', columns = [], sanitizedData = [];
 
-                    $.each(result.FISalesClosed[0], function(key, val){
-                        tableHeaders += "<th>" + key + "</th>";
-                        columns.push({data: key});
-                    });
+                    // Note: when the returned json returns only 1 row of result.FISalesClosed, it's an object not array of objects. So they have diff implementation because $('DataTable')rows.add() only accepts array.
+                    if (result.FISalesClosed.constructor !== Array) {  // Means there are only 1 returned item.
+                        $.each(result.FISalesClosed, function(key, val){
+                            tableHeaders += "<th>" + key + "</th>";
+                            columns.push({data: key});
+                        });
+
+                        sanitizedData.push(result.FISalesClosed);
+                    } else {
+                        $.each(result.FISalesClosed[0], function(key, val){
+                            tableHeaders += "<th>" + key + "</th>";
+                            columns.push({data: key});
+                        });
+
+                        sanitizedData = result.FISalesClosed;
+                    }
 
                     $("#tableDiv").empty();
-                    $("#tableDiv").append('<table id="displayTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
+                    $("#tableDiv").append('<table id="FI_SalesClosedTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
                     var dtConstructorObj = {
                                             "scrollX": true,
                                             "columns": columns,
@@ -150,24 +167,24 @@
                                             retrieve: true,
                                         };
 
-                    var displayTable = $("#displayTable").DataTable(dtConstructorObj);
+                    var FI_SalesClosedTable = $("#FI_SalesClosedTable").DataTable(dtConstructorObj);
 
-                    displayTable.clear().draw();
-                    displayTable.rows.add(result.FISalesClosed).draw();
+                    FI_SalesClosedTable.clear().draw();
+                    FI_SalesClosedTable.rows.add(sanitizedData).draw();
 
-                    $('#recordsFound').text(displayTable.rows().data().length);
-
+                    $('#recordsFound').text(FI_SalesClosedTable.rows().data().length);
+                    dlSalesReportBtn.removeClass("disabled");
                     $('#loader').removeClass('loader');
                 });
             });
 
-            // event for download sales report
-            $("#dlSalesReport").on("click", function() {
-                var salesTable = $("#displayTable").DataTable();
+            // event for download FI SalesClosed report
+            dlSalesReportBtn.on("click", function() {
+                var FI_SalesClosedTable = $("#FI_SalesClosedTable").DataTable();
                 var csvContent = "data:text/csv;charset=utf-8,";
 
                 // get the columns
-                var columns = salesTable.data()[0];
+                var columns = FI_SalesClosedTable.data()[0];
 
                 $.each(columns, function(key, value) {
                     csvContent += key + ',';
@@ -176,7 +193,7 @@
                 csvContent = csvContent.substring(0, csvContent.length - 1);    // remove the the last character, i.e. ","
                 csvContent += "\r\n";
 
-                var data = salesTable.data();
+                var data = FI_SalesClosedTable.data();
                 $.each(data, function(key, value) {
                     $.each(value, function(key, value) {
                         // In their API, if the value is an object, means null value

@@ -228,4 +228,9 @@ return [
 
     ],
 
+    /* User-defined */
+    'dms_username' => env('DMS_USERNAME', ''),
+    'dms_password' => env('DMS_PASSWORD', ''),
+    'dms_dealerId' => env('DMS_DEALER_ID', ''),
+
 ];
