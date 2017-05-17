@@ -3,20 +3,6 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
-            <div class="col-md-3">
-                Choose Dealership: 
-            </div>
-            <div class="col-md-3">
-                <select class="form-control">
-                  <option>Dealer Name 1</option>
-                  <option>Dealer Name 2</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-4"></div>
-    </div>
-    <div class="row">
         <div class="col-md-12"><br>
             <div role="tabpanel">
                 <ul class="nav nav-tabs" role="tablist">
@@ -49,12 +35,14 @@
                             <div class="col-lg-3">
                                 <button id="submitSalesQuery" type="button" class="btn btn-primary">Submit</button>
                             </div>
-                        </div>
-                        <div class="col-md-12"><div id="loader" class=""></div>
-                            <span id="recordsFound">0</span> record(s) found.
-                            <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
+                        </div><hr>
+                        <div class="row">
+                            <div class="col-md-12"><div id="loader" class=""></div>
+                                <span id="recordsFound">0</span> record(s) found.
+                                <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
-                            <div id="tableDiv"></div>
+                                <div id="tableDiv"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -81,24 +69,18 @@
                             <div class="col-lg-3">
                                 <button id="submitServiceQuery" type="button" class="btn btn-primary">Submit</button>
                             </div>
-                        </div>
-                        <div class="col-md-12"><div id="serviceLoader" class=""></div>
-                            <span id="serviceReportRecordsFound">0</span> record(s) found.
-                            <button id="dlServiceReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
+                        </div><hr>
+                        <div class="row">
+                            <div class="col-md-12"><div id="serviceLoader" class=""></div>
+                                <span id="serviceReportRecordsFound">0</span> record(s) found.
+                                <button id="dlServiceReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
-                            <div id="serviceDiv"></div>
+                                <div id="serviceDiv"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row"><hr>
-        <!-- <div class="col-md-12"><div id="loader" class=""></div>
-            <span id="recordsFound">0</span> record(s) found.
-            <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
-
-            <div id="tableDiv"></div> -->
         </div>
     </div>
 </div>

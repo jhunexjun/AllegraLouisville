@@ -181,7 +181,8 @@
             // event for download FI SalesClosed report
             dlSalesReportBtn.on("click", function() {
                 var FI_SalesClosedTable = $("#FI_SalesClosedTable").DataTable();
-                var csvContent = "data:text/csv;charset=utf-8,";
+                // var csvContent = "data:text/csv;charset=utf-8,";
+                var csvContent = '';
 
                 // get the columns
                 var columns = FI_SalesClosedTable.data()[0];
@@ -207,8 +208,29 @@
                     csvContent += "\r\n";
                 });
 
-                var encodedUri = encodeURI(csvContent);
-                window.open(encodedUri);
+                /*var encodedUri = encodeURI(csvContent);
+                window.open(encodedUri);*/
+
+                var blob = new Blob([csvContent],{type: "text/csv;charset=utf-8;"});
+
+                if (navigator.msSaveBlob) { // IE 10+
+                    navigator.msSaveBlob(blob, "csvname.csv")
+                } else {
+                    var link = document.createElement("a");
+                    if (link.download !== undefined) { // feature detection
+                        // Browsers that support HTML5 download attribute
+                        var url = URL.createObjectURL(blob);
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", "csvname.csv");
+                        link.style = "visibility:hidden";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
+
+
+
             }); // end event for download sales report
 
 
