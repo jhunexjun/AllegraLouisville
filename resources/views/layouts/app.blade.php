@@ -101,10 +101,11 @@
             // end Datepicker
 
             var dlSalesReportBtn = $("#dlSalesReportBtn");
+            var dlServiceReportBtn = $('#dlServiceReportBtn');
 
             // Sales query
             $("#submitSalesQuery").on("click", function (event) {
-                $('#loader').addClass('loader');
+                $('#salesLoader').addClass('loader');
                 $('#recordsFound').text("0");
                 $("#tableDiv").empty();
                 dlSalesReportBtn.addClass("disabled");
@@ -113,7 +114,7 @@
                 var salesEndDate = $( "#salesEndDate" ).val();
 
                 if (!salesStartDate || !salesEndDate) {
-                    $('#loader').removeClass('loader');
+                    $('#salesLoader').removeClass('loader');
                     alert("Please specify start and end date.");
                     $( "#salesStartDate" ).focus();
                     return;
@@ -123,13 +124,13 @@
 
                 $.get("{{ Request::root() }}/api/sales?" + queryParams, function(result) {
                     if (!result.FISalesClosed) {
-                        $('#loader').removeClass('loader');
+                        $('#salesLoader').removeClass('loader');
                         alert ('No data available.');
                         return;
                     }
 
                     if (result.error) {
-                        $('#loader').removeClass('loader');
+                        $('#salesLoader').removeClass('loader');
                         alert(result.message);
                         $( "#salesStartDate" ).focus();
                         return;
@@ -174,7 +175,7 @@
 
                     $('#recordsFound').text(FI_SalesClosedTable.rows().data().length);
                     dlSalesReportBtn.removeClass("disabled");
-                    $('#loader').removeClass('loader');
+                    $('#salesLoader').removeClass('loader');
                 });
             });
 
@@ -214,33 +215,146 @@
                 var blob = new Blob([csvContent],{type: "text/csv;charset=utf-8;"});
 
                 if (navigator.msSaveBlob) { // IE 10+
-                    navigator.msSaveBlob(blob, "csvname.csv")
+                    navigator.msSaveBlob(blob, "FI_SalesClosed.csv")
                 } else {
                     var link = document.createElement("a");
                     if (link.download !== undefined) { // feature detection
                         // Browsers that support HTML5 download attribute
                         var url = URL.createObjectURL(blob);
                         link.setAttribute("href", url);
-                        link.setAttribute("download", "csvname.csv");
+                        link.setAttribute("download", "FI_SalesClosed.csv");
                         link.style = "visibility:hidden";
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
                     }
                 }
-
-
-
             }); // end event for download sales report
 
 
             // Service query
             $("#submitServiceQuery").on("click", function (event) {
-                $.get("{{ Request::root() }}/api/testServiceJson", function(result) {
-                    datatableObj.clear().draw();
-                    datatableObj.rows.add(result).draw();
+                $('#serviceLoader').addClass('loader');
+                $('#serviceReportRecordsFound').text("0");
+                $("#serviceDiv").empty();
+                dlServiceReportBtn.addClass("disabled");
+
+                var serviceStartDate = $( "#serviceStartDate" ).val();
+                var serviceEndDate = $( "#serviceEndDate" ).val();
+
+                if (!serviceStartDate || !serviceEndDate) {
+                    $('#serviceLoader').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#serviceStartDate" ).focus();
+                    return;
+                }
+
+                var queryParams = "serviceStartDate=" + serviceStartDate + "&serviceEndDate=" + serviceEndDate;
+
+                $.get("{{ Request::root() }}/api/service?" + queryParams, function(result) {
+                    if (!result.ServiceSalesClosed) {
+                        $('#serviceLoader').removeClass('loader');
+                        alert ('No data available.');
+                        return;
+                    }
+
+                    if (result.error) {
+                        $('#serviceLoader').removeClass('loader');
+                        alert(result.message);
+                        $( "#serviceStartDate" ).focus();
+                        return;
+                    }
+
+                    var tableHeaders = '', columns = [], sanitizedData = [];
+
+                    // Note: when the returned json returns only 1 row of result.ServiceSalesClosed, it's an object not array of objects. So they have diff implementation because $('DataTable')rows.add() only accepts array.
+                    if (result.ServiceSalesClosed.constructor !== Array) {  // Means there are only 1 returned item.
+                        $.each(result.ServiceSalesClosed, function(key, val){
+                            tableHeaders += "<th>" + key + "</th>";
+                            columns.push({data: key});
+                        });
+
+                        sanitizedData.push(result.ServiceSalesClosed);
+                    } else {
+                        $.each(result.ServiceSalesClosed[0], function(key, val){
+                            tableHeaders += "<th>" + key + "</th>";
+                            columns.push({data: key});
+                        });
+
+                        sanitizedData = result.ServiceSalesClosed;
+                    }
+
+                    $("#serviceDiv").empty();
+                    $("#serviceDiv").append('<table id="Service_SalesClosedTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
+                    var dtConstructorObj = {
+                                            "scrollX": true,
+                                            "columns": columns,
+                                            rowCallback: function (row, data) {},
+                                            filter: false,
+                                            info: false,
+                                            ordering: false,
+                                            processing: true,
+                                            retrieve: true,
+                                        };
+
+                    var Service_SalesClosedTable = $("#Service_SalesClosedTable").DataTable(dtConstructorObj);
+
+                    Service_SalesClosedTable.clear().draw();
+                    Service_SalesClosedTable.rows.add(sanitizedData).draw();
+
+                    $('#serviceReportRecordsFound').text(Service_SalesClosedTable.rows().data().length);
+                    dlServiceReportBtn.removeClass("disabled");
+                    $('#serviceLoader').removeClass('loader');
                 });
             });
+
+            // event for download Service Sales Closed report
+            dlServiceReportBtn.on("click", function() {
+                var Service_SalesClosedTable = $("#Service_SalesClosedTable").DataTable();
+                var csvContent = '';
+
+                // get the columns
+                var columns = Service_SalesClosedTable.data()[0];
+
+                $.each(columns, function(key, value) {
+                    csvContent += key + ',';
+                });
+
+                csvContent = csvContent.substring(0, csvContent.length - 1);    // remove the the last character, i.e. ","
+                csvContent += "\r\n";
+
+                var data = Service_SalesClosedTable.data();
+                $.each(data, function(key, value) {
+                    $.each(value, function(key, value) {
+                        // In their API, if the value is an object, means null value
+                        if (typeof value != "object")
+                            csvContent += "\"" + value + "\"";
+
+                        csvContent += ",";
+                    });
+
+                    csvContent = csvContent.substring(0, csvContent.length - 1);
+                    csvContent += "\r\n";
+                });
+
+                var blob = new Blob([csvContent],{type: "text/csv;charset=utf-8;"});
+
+                if (navigator.msSaveBlob) { // IE 10+
+                    navigator.msSaveBlob(blob, "service_sales_closed.csv")
+                } else {
+                    var link = document.createElement("a");
+                    if (link.download !== undefined) { // feature detection
+                        // Browsers that support HTML5 download attribute
+                        var url = URL.createObjectURL(blob);
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", "service_sales_closed.csv");
+                        link.style = "visibility:hidden";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
+            }); // end event for download service sales report
 
 
         });

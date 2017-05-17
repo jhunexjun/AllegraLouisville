@@ -15,7 +15,7 @@
                     <div role="tabpanel" class="tab-pane active" id="salesDataTab">
                         <h4><strong>Sales Data Filters</strong></h4><br>
                         <div class="row">
-                            <div class="col-lg-3">Dates:</div>
+                            <div class="col-lg-3">Purchase Date:</div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <span class="input-group-btn">
@@ -37,7 +37,7 @@
                             </div>
                         </div><hr>
                         <div class="row">
-                            <div class="col-md-12"><div id="loader" class=""></div>
+                            <div class="col-md-12"><div id="salesLoader" class=""></div>
                                 <span id="recordsFound">0</span> record(s) found.
                                 <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
@@ -49,13 +49,13 @@
                     <div role="tabpanel" class="tab-pane" id="serviceDataTab">
                         <h4><strong>Service Data Filters</strong></h4><br>
                         <div class="row">
-                            <div class="col-lg-3">Dates:</div>
+                            <div class="col-lg-3">Repair Order Date:</div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="Start Date" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -63,7 +63,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="End Date" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">

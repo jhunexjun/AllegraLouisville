@@ -19,4 +19,4 @@ use Illuminate\Http\Request;
 
 
 Route::get('sales', 'salesController@getSalesData')->middleware('cors');
-Route::get('testServiceJson', 'TestJsonController@getTestServiceJson')->middleware('cors');
+Route::get('service', 'serviceController@getServiceData')->middleware('cors');
