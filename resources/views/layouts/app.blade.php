@@ -93,12 +93,12 @@
     <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script>
         $(function() {
-            // Datepicker
+            // Datepickers
             $( "#salesStartDate" ).datepicker();
             $( "#salesEndDate" ).datepicker();
             $( "#serviceStartDate" ).datepicker();
             $( "#serviceEndDate" ).datepicker();
-            // end Datepicker
+            // end Datepickers
 
             var dlSalesReportBtn = $("#dlSalesReportBtn");
             var dlServiceReportBtn = $('#dlServiceReportBtn');
@@ -209,8 +209,10 @@
 
             // event for download FI SalesClosed report
             dlSalesReportBtn.on("click", function() {
+                if (dlSalesReportBtn.hasClass('disabled'))
+                    return;
+
                 var FI_SalesClosedTable = $("#FI_SalesClosedTable").DataTable();
-                // var csvContent = "data:text/csv;charset=utf-8,";
                 var csvContent = '';
 
                 // get the columns
@@ -236,9 +238,6 @@
                     csvContent = csvContent.substring(0, csvContent.length - 1);
                     csvContent += "\r\n";
                 });
-
-                /*var encodedUri = encodeURI(csvContent);
-                window.open(encodedUri);*/
 
                 var blob = new Blob([csvContent],{type: "text/csv;charset=utf-8;"});
 
@@ -341,6 +340,9 @@
 
             // event for download Service Sales Closed report
             dlServiceReportBtn.on("click", function() {
+                if (dlServiceReportBtn.hasClass('disabled'))
+                    return;
+
                 var Service_SalesClosedTable = $("#Service_SalesClosedTable").DataTable();
                 var csvContent = '';
 
