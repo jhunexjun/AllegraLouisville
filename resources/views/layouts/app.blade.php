@@ -103,6 +103,31 @@
             var dlSalesReportBtn = $("#dlSalesReportBtn");
             var dlServiceReportBtn = $('#dlServiceReportBtn');
 
+            function replaceEmptyObjectInAnArrayOrObject(arrayOrObject) {
+                this.arrayOrObject = arrayOrObject;
+
+                // this will avoid [object Object] in the DataTable values.
+                this.getSanitized = function() {
+                    var that = this.arrayOrObject;
+
+                    if (this.arrayOrObject.constructor !== Array) {  // Means there are only 1 returned item.
+                        $.each(this.arrayOrObject, function(key, value) {
+                            if (typeof value === "object")
+                                that[key] = "";
+                        });                        
+                    } else {    // if arrayOrObject is actually array of objects
+                        $.each(this.arrayOrObject, function(key, value) {
+                            $.each(value, function(key2, value2) {
+                                if (typeof value2 === "object")
+                                    that[key][key2] = "";
+                            });
+                        });
+                    }
+
+                    return this.arrayOrObject;
+                }
+            }
+
             // Sales query
             $("#submitSalesQuery").on("click", function (event) {
                 $('#salesLoader').addClass('loader');
@@ -135,6 +160,9 @@
                         $( "#salesStartDate" ).focus();
                         return;
                     }
+                    
+                    var sanitizedFISalesClosed = new replaceEmptyObjectInAnArrayOrObject(result.FISalesClosed);
+                    result.FISalesClosed = sanitizedFISalesClosed.getSanitized();
 
                     var tableHeaders = '', columns = [], sanitizedData = [];
 
@@ -264,6 +292,9 @@
                         $( "#serviceStartDate" ).focus();
                         return;
                     }
+
+                    var sanitizedServiceSalesClosed = new replaceEmptyObjectInAnArrayOrObject(result.ServiceSalesClosed);
+                    result.ServiceSalesClosed = sanitizedServiceSalesClosed.getSanitized();
 
                     var tableHeaders = '', columns = [], sanitizedData = [];
 
