@@ -44,7 +44,19 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @if (Auth::guest())
+                            &nbsp;
+                        @else
+                            @if (Auth::user()->admin)
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ route('register') }}">Add user</a></li>
+                                        <li><a href="{{ route('showUsers') }}">Show users</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -60,10 +72,6 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        @if (Auth::user()->admin)
-                                            <a href="{{ route('register') }}">Add user</a>
-                                        @endif
-
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

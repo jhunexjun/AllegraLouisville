@@ -21,7 +21,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="salesStartDate" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="salesStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -29,7 +29,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="salesEndDate" type="text" class="form-control" placeholder="Date 1" value="" />
+                                    <input id="salesEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -55,7 +55,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">From</button>
                                     </span>
-                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="Start Date" value="" />
+                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -63,7 +63,7 @@
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">To</button>
                                     </span>
-                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="End Date" value="" />
+                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><hr>
         </div>
     </div>
 </div>

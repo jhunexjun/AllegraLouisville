@@ -1,0 +1,1 @@
+{{--  do not delete. This blade is for PHP-Vars-To-Js-Transformer. Check on github. --}}

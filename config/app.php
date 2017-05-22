@@ -177,6 +177,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // https://github.com/laracasts/PHP-Vars-To-Js-Transformer
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+
     ],
 
     /*

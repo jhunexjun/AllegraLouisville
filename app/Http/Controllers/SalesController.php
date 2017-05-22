@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class salesController extends Controller
+class SalesController extends Controller
 {
     public function getSalesData(Request $request) {
         if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))

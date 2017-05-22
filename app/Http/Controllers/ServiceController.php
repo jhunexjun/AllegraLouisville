@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class serviceController extends Controller
+class ServiceController extends Controller
 {
     public function getServiceData(Request $request) {
         if (!$request->has('serviceStartDate') || !$request->has('serviceEndDate'))

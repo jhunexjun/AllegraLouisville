@@ -18,5 +18,5 @@ use Illuminate\Http\Request;
 });*/
 
 
-Route::get('sales', 'salesController@getSalesData')->middleware('cors');
-Route::get('service', 'serviceController@getServiceData')->middleware('cors');
+Route::get('sales', 'SalesController@getSalesData')->middleware('cors');
+Route::get('service', 'ServiceController@getServiceData')->middleware('cors');
