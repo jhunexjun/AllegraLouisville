@@ -34,8 +34,6 @@
         if (typeof users == 'undefined')
             return;
 
-            console.log(users);
-
         window.advantageConcepts = {};
         window.advantageConcepts.users = users;
 

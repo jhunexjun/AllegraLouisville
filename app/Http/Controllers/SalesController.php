@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class SalesController extends Controller
 {
+    public function __construct() {
+        // $this->middleware('auth');
+    }
+
     public function getSalesData(Request $request) {
         if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))
             return response()->json(['error' => 1, 'message' => 'tart and end date.']);

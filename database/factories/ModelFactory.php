@@ -19,6 +19,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
+        'admin' => 1,
         'remember_token' => str_random(10),
     ];
+});
+
+$factory->state(App\User::class, 'ordinaryUser', function ($faker) {
+	return ['admin' => 0];
 });

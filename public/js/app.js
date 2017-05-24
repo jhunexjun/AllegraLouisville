@@ -1953,8 +1953,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 $(document).ready(function () {
     if (typeof users == 'undefined') return;
 
-    console.log(users);
-
     window.advantageConcepts = {};
     window.advantageConcepts.users = users;
 
