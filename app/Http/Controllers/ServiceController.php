@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function getServiceData(Request $request) {
         if (!$request->has('serviceStartDate') || !$request->has('serviceEndDate'))
             return response()->json(['error' => 1, 'message' => 'tart and end date.']);
@@ -25,6 +29,7 @@ class ServiceController extends Controller
         ]);
 
         $xml = simplexml_load_string($res->getBody()->getContents());
-        return response()->json($xml);
+        $json = json_encode($xml);
+        return view('service', ['result' => $json]);
     }
 }

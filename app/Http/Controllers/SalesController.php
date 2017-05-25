@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 class SalesController extends Controller
 {
     public function __construct() {
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function getSalesData(Request $request) {
         if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))
-            return response()->json(['error' => 1, 'message' => 'tart and end date.']);
+            return view('sales');
 
         $salesStartDate = $request->input('salesStartDate');
         $salesEndDate = $request->input('salesEndDate');
@@ -29,6 +29,7 @@ class SalesController extends Controller
         ]);
 
         $xml = simplexml_load_string($res->getBody()->getContents());
-        return response()->json($xml);
+        $json = json_encode($xml);
+        return view('sales', ['result' => $json]);
     }
 }

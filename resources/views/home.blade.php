@@ -14,70 +14,59 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="salesDataTab">
                         <h4><strong>Sales Data Filters</strong></h4><br>
-                        <div class="row">
-                            <div class="col-lg-3">Purchase Date:</div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">From</button>
-                                    </span>
-                                    <input id="salesStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                        <form method="get" action="sales">
+                            <div class="row">
+                                <div class="col-lg-3">Purchase Date:</div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">From</button>
+                                        </span>
+                                        <input id="salesStartDate" name="salesStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">To</button>
+                                        </span>
+                                        <input id="salesEndDate" name="salesEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <button id="submitSalesQuery" type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">To</button>
-                                    </span>
-                                    <input id="salesEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <button id="submitSalesQuery" type="button" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div><hr>
-                        <div class="row">
-                            <div class="col-md-12"><div id="salesLoader" class=""></div>
-                                <span id="recordsFound">0</span> record(s) found.
-                                <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
-
-                                <div id="tableDiv"></div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
 
+                    <!-- service tab -->
                     <div role="tabpanel" class="tab-pane" id="serviceDataTab">
                         <h4><strong>Service Data Filters</strong></h4><br>
-                        <div class="row">
-                            <div class="col-lg-3">Repair Order Date:</div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">From</button>
-                                    </span>
-                                    <input id="serviceStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                        <form method="get" action="service">
+                            <div class="row">
+                                <div class="col-lg-3">Repair Order Date:</div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">From</button>
+                                        </span>
+                                        <input id="serviceStartDate" name="serviceStartDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">To</button>
+                                        </span>
+                                        <input id="serviceEndDate" name="serviceEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <button id="submitServiceQuery" type="submit" type="button" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">To</button>
-                                    </span>
-                                    <input id="serviceEndDate" type="text" class="form-control" placeholder="MM/dd/YYYY" value="" />
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <button id="submitServiceQuery" type="button" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div><hr>
-                        <div class="row">
-                            <div class="col-md-12"><div id="serviceLoader" class=""></div>
-                                <span id="serviceReportRecordsFound">0</span> record(s) found.
-                                <button id="dlServiceReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
-
-                                <div id="serviceDiv"></div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div><hr>
@@ -85,3 +74,16 @@
     </div>
 </div>
 @endsection
+
+@push('scripts-dtPicker')
+    <script type="text/javascript">
+        $(function() {
+            // Datepickers
+            $( "#salesStartDate" ).datepicker();
+            $( "#salesEndDate" ).datepicker();
+            $( "#serviceStartDate" ).datepicker();
+            $( "#serviceEndDate" ).datepicker();
+            // end Datepickers
+        });
+    </script>
+@endpush()
