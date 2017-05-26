@@ -29,9 +29,10 @@ php artisan clear-compiled
 1. sudo composer dumpautoload -o
 2. php artisan config:cache
 
-#### Testing
 
-Common issues
+#### Common issues
+
+### Testing
 
 1. With the current packages in composer from #2, I encountered
 ```
@@ -92,3 +93,29 @@ Time: 2.34 seconds, Memory: 14.50MB
 
 OK (1 test, 1 assertion)
 ```
+
+2.
+```
+devserver@devserver:/var/www/html/advantageConcepts$ sudo composer install
+[sudo] password for devserver:
+Do not run Composer as root/super user! See https://getcomposer.org/root for details
+Loading composer repositories with package information
+Installing dependencies (including require-dev) from lock file
+Warning: The lock file is not up to date with the latest changes in composer.json. You may be getting outdated dependencies. Run update to update them.
+Your requirements could not be resolved to an installable set of packages.
+
+  Problem 1
+    - Installation request for facebook/webdriver 1.4.1 -> satisfiable by facebook/webdriver[1.4.1].
+    - facebook/webdriver 1.4.1 requires ext-curl * -> the requested PHP extension curl is missing from your system.
+  Problem 2
+    - facebook/webdriver 1.4.1 requires ext-curl * -> the requested PHP extension curl is missing from your system.
+    - laravel/dusk v1.1.0 requires facebook/webdriver ~1.0 -> satisfiable by facebook/webdriver[1.4.1].
+    - Installation request for laravel/dusk v1.1.0 -> satisfiable by laravel/dusk[v1.1.0].
+```
+To fix run `sudo apt-get install <php version>`. <php version> should be php5.6-curl or php7.0-curl.
+4. `The bootstrap/cache directory must be present and writable.` To fix:
+```
+sudo chmod -R 775 bootstrap/cache/
+php artisan cache:clear
+```
+You can try the second one alone.

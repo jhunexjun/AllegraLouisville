@@ -86,11 +86,33 @@
             $( "#serviceEndDate" ).datepicker();
             // end Datepickers
 
-            $('#submitSalesQuery').on('click', function() {
+            $('#submitSalesQuery').on('click', function(event) {
                 $('#loaderDiv').addClass('loader');
+
+                var salesStartDate = $( "#salesStartDate" ).val();
+                var salesEndDate = $( "#salesEndDate" ).val();
+
+                if (!salesStartDate || !salesEndDate) {
+                    $('#loaderDiv').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#salesStartDate" ).focus();
+                    event.preventDefault();
+                    return;
+                }
             });
             $('#submitServiceQuery').on('click', function() {
                 $('#loaderDiv').addClass('loader');
+                
+                var serviceStartDate = $( "#serviceStartDate" ).val();
+                var serviceEndDate = $( "#serviceEndDate" ).val();
+
+                if (!serviceStartDate || !serviceEndDate) {
+                    $('#loaderDiv').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#serviceStartDate" ).focus();
+                    event.preventDefault();
+                    return;
+                }
             });
         });
     </script>
