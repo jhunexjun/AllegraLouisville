@@ -39,7 +39,7 @@
                                 </div>
                             </form><hr>
                             <div class="row">
-                                <div class="col-md-12"><div id="salesLoader" class="loader"></div>
+                                <div class="col-md-12">
                                     <span id="recordsFound">0</span> record(s) found.
                                     <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
@@ -75,7 +75,7 @@
                                 </div>
                             </form><hr>
                             <div class="row">
-                                <div class="col-md-12"><div id="serviceLoader" class=""></div>
+                                <div class="col-md-12">
                                     <span id="serviceReportRecordsFound">0</span> record(s) found.
                                     <button id="dlServiceReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
@@ -85,6 +85,7 @@
                         </div>
                     </div>
                 </div><hr>
+                <div id="loader" class="loader"></div>
             </div>
         </div>
     </div>
@@ -93,6 +94,26 @@
 @push('scriptsForSales')
     <script type="text/javascript">
         $(function() {
+            // default the dates based from url param
+            var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+
+            $('#salesStartDate').val(getUrlParameter('salesStartDate'))
+            $('#salesEndDate').val(getUrlParameter('salesEndDate'))
+                                    
+
             // Datepickers
             $( "#salesStartDate" ).datepicker();
             $( "#salesEndDate" ).datepicker();
@@ -101,6 +122,7 @@
             // end Datepickers
 
             var dlSalesReportBtn = $("#dlSalesReportBtn");
+            var dlServiceReportBtn = $("#dlServiceReportBtn");
 
             function replaceEmptyObjectInAnArrayOrObject(arrayOrObject) {
                 this.arrayOrObject = arrayOrObject;
@@ -128,7 +150,7 @@
             };
 
             $("#submitSalesQuery").on("click", function (event) {
-                $('#salesLoader').addClass('loader');
+                $('#loader').addClass('loader');
                 $('#recordsFound').text("0");
                 $("#tableDiv").empty();
                 dlSalesReportBtn.addClass("disabled");
@@ -137,7 +159,7 @@
                 var salesEndDate = $( "#salesEndDate" ).val();
 
                 if (!salesStartDate || !salesEndDate) {
-                    $('#salesLoader').removeClass('loader');
+                    $('#loader').removeClass('loader');
                     alert("Please specify start and end date.");
                     $( "#salesStartDate" ).focus();
                     event.preventDefault();
@@ -145,7 +167,37 @@
                 }
             });
 
+            $("#submitServiceQuery").on("click", function (event) {
+                $('#loader').addClass('loader');
+                $('#serviceReportRecordsFound').text("0");
+                $("#serviceDiv").empty();
+                dlServiceReportBtn.addClass("disabled");
+
+                var serviceStartDate = $( "#serviceStartDate" ).val();
+                var serviceEndDate = $( "#serviceEndDate" ).val();
+
+                if (!serviceStartDate || !serviceEndDate) {
+                    $('#loader').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#serviceStartDate" ).focus();
+                    event.preventDefault();
+                    return;
+                }
+            });
+
             var result = {!! $result !!};
+
+            if (!result.FISalesClosed) {
+                $('#loader').removeClass('loader');
+                alert ('No data available.');
+                return;
+            }
+
+            if (result.error) {
+                $('#loader').removeClass('loader');
+                alert(result.message);
+                return;
+            }
 
             var sanitizedFISalesClosed = new replaceEmptyObjectInAnArrayOrObject(result.FISalesClosed);
             result.FISalesClosed = sanitizedFISalesClosed.getSanitized();
@@ -189,7 +241,7 @@
 
             $('#recordsFound').text(FI_SalesClosedTable.rows().data().length);
             dlSalesReportBtn.removeClass("disabled");
-            $('#salesLoader').removeClass('loader');
+            $('#loader').removeClass('loader');
 
             // event for download FI SalesClosed report
             dlSalesReportBtn.on("click", function() {

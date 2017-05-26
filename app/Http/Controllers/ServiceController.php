@@ -12,7 +12,7 @@ class ServiceController extends Controller
 
     public function getServiceData(Request $request) {
         if (!$request->has('serviceStartDate') || !$request->has('serviceEndDate'))
-            return response()->json(['error' => 1, 'message' => 'tart and end date.']);
+            return view('service', ['result' => json_encode([])]);
 
         $serviceStartDate = $request->input('serviceStartDate');
         $serviceEndDate = $request->input('serviceEndDate');
@@ -30,6 +30,7 @@ class ServiceController extends Controller
 
         $xml = simplexml_load_string($res->getBody()->getContents());
         $json = json_encode($xml);
+
         return view('service', ['result' => $json]);
     }
 }

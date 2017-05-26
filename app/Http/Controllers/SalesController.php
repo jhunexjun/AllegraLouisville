@@ -12,7 +12,7 @@ class SalesController extends Controller
 
     public function getSalesData(Request $request) {
         if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))
-            return view('sales');
+            return view('sales', ['result' => json_encode([])]);
 
         $salesStartDate = $request->input('salesStartDate');
         $salesEndDate = $request->input('salesEndDate');
@@ -30,6 +30,7 @@ class SalesController extends Controller
 
         $xml = simplexml_load_string($res->getBody()->getContents());
         $json = json_encode($xml);
+
         return view('sales', ['result' => $json]);
     }
 }

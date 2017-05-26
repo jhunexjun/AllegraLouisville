@@ -34,13 +34,13 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
-                                        <button id="submitSalesQuery" type="button" class="btn btn-primary">Submit</button>
+                                        <button id="submitSalesQuery" type="submit" type="button" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
                             </form><hr>
                             <div class="row">
-                                <div class="col-md-12"><div id="salesLoader"></div>
-                                    <span id="recordsFound">0</span> record(s) found.
+                                <div class="col-md-12">
+                                    <span id="salesReportRecordsFound">0</span> record(s) found.
                                     <button id="dlSalesReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
                                     <div id="FISalesTableDev"></div>
@@ -75,7 +75,7 @@
                                 </div>
                             </form><hr>
                             <div class="row">
-                                <div class="col-md-12"><div id="serviceLoader" class="loader"></div>
+                                <div class="col-md-12">
                                     <span id="serviceReportRecordsFound">0</span> record(s) found.
                                     <button id="dlServiceReportBtn" type="button" class="btn btn-primary pull-right disabled">Download Report</button>
 
@@ -85,6 +85,7 @@
                         </div>
                     </div>
                 </div><hr>
+                <div id="loader" class="loader"></div>
             </div>
         </div>
     </div>
@@ -93,6 +94,26 @@
 @push('scriptsForSales')
     <script type="text/javascript">
         $(function() {
+            // default the dates based from url param
+            var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+
+            $('#serviceStartDate').val(getUrlParameter('serviceStartDate'))
+            $('#serviceEndDate').val(getUrlParameter('serviceEndDate'))
+
+
             // Datepickers
             $( "#salesStartDate" ).datepicker();
             $( "#salesEndDate" ).datepicker();
@@ -100,6 +121,7 @@
             $( "#serviceEndDate" ).datepicker();
             // end Datepickers
 
+            var dlSalesReportBtn = $("#dlSalesReportBtn");
             var dlServiceReportBtn = $('#dlServiceReportBtn');
 
             function replaceEmptyObjectInAnArrayOrObject(arrayOrObject) {
@@ -127,8 +149,26 @@
                 }
             };
 
+            $("#submitSalesQuery").on("click", function (event) {
+                $('#loader').addClass('loader');
+                $('#salesReportRecordsFound').text("0");
+                $("#FISalesTableDev").empty();
+                dlSalesReportBtn.addClass("disabled");
+
+                var salesStartDate = $( "#salesStartDate" ).val();
+                var salesEndDate = $( "#salesEndDate" ).val();
+
+                if (!salesStartDate || !salesEndDate) {
+                    $('#loader').removeClass('loader');
+                    alert("Please specify start and end date.");
+                    $( "#salesStartDate" ).focus();
+                    event.preventDefault();
+                    return;
+                }
+            });
+
             $("#submitServiceQuery").on("click", function (event) {
-                $('#serviceLoader').addClass('loader');
+                $('#loader').addClass('loader');
                 $('#serviceReportRecordsFound').text("0");
                 $("#serviceDiv").empty();
                 dlServiceReportBtn.addClass("disabled");
@@ -137,9 +177,10 @@
                 var serviceEndDate = $( "#serviceEndDate" ).val();
 
                 if (!serviceStartDate || !serviceEndDate) {
-                    $('#serviceLoader').removeClass('loader');
+                    $('#loader').removeClass('loader');
                     alert("Please specify start and end date.");
                     $( "#serviceStartDate" ).focus();
+                    event.preventDefault();
                     return;
                 }
             });
@@ -147,15 +188,14 @@
             var result = {!! $result !!};
 
             if (!result.ServiceSalesClosed) {
-                $('#serviceLoader').removeClass('loader');
+                $('#loader').removeClass('loader');
                 alert ('No data available.');
                 return;
             }
 
             if (result.error) {
-                $('#serviceLoader').removeClass('loader');
+                $('#loader').removeClass('loader');
                 alert(result.message);
-                $( "#serviceStartDate" ).focus();
                 return;
             }
 
@@ -201,7 +241,7 @@
 
             $('#serviceReportRecordsFound').text(Service_SalesClosedTable.rows().data().length);
             dlServiceReportBtn.removeClass("disabled");
-            $('#serviceLoader').removeClass('loader');
+            $('#loader').removeClass('loader');
 
             // event for download Service Sales Closed report
             dlServiceReportBtn.on("click", function() {
