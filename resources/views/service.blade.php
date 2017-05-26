@@ -6,13 +6,13 @@
             <div class="col-md-12"><br>
                 <div role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#salesDataTab" aria-controls="salesDataTab" role="tab" data-toggle="tab">Sales Data</a></li>
-                        <li role="presentation"><a href="#serviceDataTab" aria-controls="serviceDataTab" role="tab" data-toggle="tab">Service Data</a></li>
+                        <li role="presentation"><a href="#salesDataTab" aria-controls="salesDataTab" role="tab" data-toggle="tab">Sales Data</a></li>
+                        <li role="presentation" class="active"><a href="#serviceDataTab" aria-controls="serviceDataTab" role="tab" data-toggle="tab">Service Data</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="salesDataTab">
+                        <div role="tabpanel" class="tab-pane" id="salesDataTab">
                             <h4><strong>Sales Data Filters</strong></h4><br>
                             <form method="get" action="sales">
                                 <div class="row">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <div role="tabpanel" class="tab-pane" id="serviceDataTab">
+                        <div role="tabpanel" class="tab-pane active" id="serviceDataTab">
                             <h4><strong>Service Data Filters</strong></h4><br>
                             <form method="get" action="service">
                                 <div class="row">

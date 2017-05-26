@@ -70,6 +70,7 @@
                     </div>
                 </div>
             </div><hr>
+            <div id="loaderDiv"></div>
         </div>
     </div>
 </div>
@@ -84,6 +85,13 @@
             $( "#serviceStartDate" ).datepicker();
             $( "#serviceEndDate" ).datepicker();
             // end Datepickers
+
+            $('#submitSalesQuery').on('click', function() {
+                $('#loaderDiv').addClass('loader');
+            });
+            $('#submitServiceQuery').on('click', function() {
+                $('#loaderDiv').addClass('loader');
+            });
         });
     </script>
 @endpush()
