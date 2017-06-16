@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12"><br>
+        <div class="col-md-12">
             <div role="tabpanel">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#salesDataTab" aria-controls="salesDataTab" role="tab" data-toggle="tab">Sales Data</a></li>
@@ -15,6 +15,18 @@
                     <div role="tabpanel" class="tab-pane active" id="salesDataTab">
                         <h4><strong>Sales Data Filters</strong></h4><br>
                         <form method="get" action="sales">
+                            <div class="row">
+                                <div class="col-lg-3">Dealer ID</div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <select id="" class="form-control">
+                                            
+                                            <option value="">3PAACONCEPTSDEV1</option>
+                                            <option value="">3PAACONCEPTSDEV2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
                             <div class="row">
                                 <div class="col-lg-3">Purchase Date:</div>
                                 <div class="col-lg-3">
