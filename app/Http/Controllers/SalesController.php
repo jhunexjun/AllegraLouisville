@@ -11,7 +11,7 @@ class SalesController extends Controller
     }
 
     public function getSalesData(Request $request) {
-        if (!$request->has('salesStartDate') || !$request->has('salesEndDate'))
+        if (!$request->has('salesStartDate') || !$request->has('salesEndDate') || !$request->has('dealerID'))
             return view('sales', ['result' => json_encode([])]);
 
         $salesStartDate = $request->input('salesStartDate');
@@ -23,7 +23,7 @@ class SalesController extends Controller
             'form_params' => [
                 'qparamStartDate' => $salesStartDate,
                 'qparamEndDate' => $salesEndDate,
-                'dealerId' => config('app.dms_dealerId'),
+                'dealerId' => $request->input('dealerID'),
                 'queryId' => 'FISC_DateRange',
             ]
         ]);
@@ -31,6 +31,8 @@ class SalesController extends Controller
         $xml = simplexml_load_string($res->getBody()->getContents());
         $json = json_encode($xml);
 
-        return view('sales', ['result' => $json]);
+        $dealers = \App\Dealer::all();
+
+        return view('sales', ['result' => $json, 'dealerIDs' => $dealers]);
     }
 }

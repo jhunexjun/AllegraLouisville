@@ -19,10 +19,10 @@
                                 <div class="col-lg-3">Dealer ID</div>
                                 <div class="col-lg-3">
                                     <div class="input-group">
-                                        <select id="" class="form-control">
-                                            
-                                            <option value="">3PAACONCEPTSDEV1</option>
-                                            <option value="">3PAACONCEPTSDEV2</option>
+                                        <select id="dealerIDforSalesTab" name="dealerID" class="form-control">
+                                            @foreach ($dealerIDs as $dealerID)
+                                                <option value="{{ $dealerID->dealerId }}">{{ $dealerID->dealerId }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -56,6 +56,18 @@
                     <div role="tabpanel" class="tab-pane" id="serviceDataTab">
                         <h4><strong>Service Data Filters</strong></h4><br>
                         <form method="get" action="service">
+                            <div class="row">
+                                <div class="col-lg-3">Dealer ID</div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <select id="dealerIDforServiceTab" name="dealerID" class="form-control">
+                                            @foreach ($dealerIDs as $dealerID)
+                                                <option value="{{ $dealerID->dealerId }}">{{ $dealerID->dealerId }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
                             <div class="row">
                                 <div class="col-lg-3">Repair Order Date:</div>
                                 <div class="col-lg-3">

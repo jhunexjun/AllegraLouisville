@@ -11,7 +11,7 @@ class ServiceController extends Controller
     }
 
     public function getServiceData(Request $request) {
-        if (!$request->has('serviceStartDate') || !$request->has('serviceEndDate'))
+        if (!$request->has('serviceStartDate') || !$request->has('serviceEndDate') || !$request->has('dealerID'))
             return view('service', ['result' => json_encode([])]);
 
         $serviceStartDate = $request->input('serviceStartDate');
@@ -23,7 +23,7 @@ class ServiceController extends Controller
             'form_params' => [
                 'qparamStartDate' => $serviceStartDate,
                 'qparamEndDate' => $serviceEndDate,
-                'dealerId' => config('app.dms_dealerId'),
+                'dealerId' => $request->input('dealerID'),
                 'queryId' => 'SSC_DateRange_H',
             ]
         ]);
@@ -31,6 +31,8 @@ class ServiceController extends Controller
         $xml = simplexml_load_string($res->getBody()->getContents());
         $json = json_encode($xml);
 
-        return view('service', ['result' => $json]);
+        $dealers = \App\Dealer::all();
+
+        return view('service', ['result' => $json, 'dealerIDs' => $dealers]);
     }
 }

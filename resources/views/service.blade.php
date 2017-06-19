@@ -10,11 +10,23 @@
                         <li role="presentation" class="active"><a href="#serviceDataTab" aria-controls="serviceDataTab" role="tab" data-toggle="tab">Service Data</a></li>
                     </ul>
 
-                    <!-- Tab panes -->
+                    <!-- Sales tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane" id="salesDataTab">
                             <h4><strong>Sales Data Filters</strong></h4><br>
                             <form method="get" action="sales">
+                                <div class="row">
+                                    <div class="col-lg-3">Dealer ID</div>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <select id="dealerIDforSalesTab" name="dealerID" class="form-control">
+                                                @foreach ($dealerIDs as $dealerID)
+                                                    <option value="{{ $dealerID->dealerId }}">{{ $dealerID->dealerId }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><br>
                                 <div class="row">
                                     <div class="col-lg-3">Purchase Date:</div>
                                     <div class="col-lg-3">
@@ -48,9 +60,22 @@
                             </div>
                         </div>
 
+                        <!-- Service tab panes -->
                         <div role="tabpanel" class="tab-pane active" id="serviceDataTab">
                             <h4><strong>Service Data Filters</strong></h4><br>
                             <form method="get" action="service">
+                                <div class="row">
+                                    <div class="col-lg-3">Dealer ID</div>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <select id="dealerIDforServiceTab" name="dealerID" class="form-control">
+                                                @foreach ($dealerIDs as $dealerID)
+                                                    <option value="{{ $dealerID->dealerId }}">{{ $dealerID->dealerId }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><br>
                                 <div class="row">
                                     <div class="col-lg-3">Repair Order Date:</div>
                                     <div class="col-lg-3">
@@ -96,7 +121,7 @@
         $(function() {
             // default the dates based from url param
             var getUrlParameter = function getUrlParameter(sParam) {
-            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
                 sURLVariables = sPageURL.split('&'),
                 sParameterName,
                 i;
@@ -112,6 +137,7 @@
 
             $('#serviceStartDate').val(getUrlParameter('serviceStartDate'))
             $('#serviceEndDate').val(getUrlParameter('serviceEndDate'))
+            $('#dealerIDforServiceTab').val(getUrlParameter('dealerID'))
 
 
             // Datepickers
