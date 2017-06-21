@@ -53,6 +53,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ route('register') }}">Add user</a></li>
                                         <li><a href="{{ route('showUsers') }}">Show users</a></li>
+                                        <li><a href="{{ route('dealers') }}">Dealers</a></li>
                                     </ul>
                                 </li>
                             @endif

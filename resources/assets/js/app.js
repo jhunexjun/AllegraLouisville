@@ -17,7 +17,14 @@ window.Vue = require('vue');
 
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('dealers', require('./components/Dealers.vue'));
 
 const app = new Vue({
     el: '#app'
 });
+
+/*Vue.http.interceptors.push((request, next) => {
+    request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+
+    next();
+});*/

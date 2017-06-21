@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/showUsers', 'UsersController@index')->name('showUsers');
+Route::get('/dealers', 'DealerController@index')->name('dealers');
+Route::post('/addDealer', 'DealerController@addDealer');
 
 Route::get('/sales', 'SalesController@getSalesData');
 Route::get('/service', 'ServiceController@getServiceData');
