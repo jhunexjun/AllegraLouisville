@@ -35,16 +35,24 @@ class SalesController extends Controller
                 ]
             ]);
         } catch (RequestException $e) {
+            $response = '';
+
+            if ($e->hasResponse())
+                $response = Psr7\str($e->getResponse());
+
+            $errorMessage = "Request: " .Psr7\str($e->getRequest()) . ' Response: ' . $response;
+            error_log($errorMessage);
+            
             return view('sales', ['result' => json_encode([]), 'dealerIDs' => $dealers]);
         }
 
         $xml = simplexml_load_string($res->getBody()->getContents());
         $json = json_encode($xml);
-        // $object = json_decode($json);
+        /*$object = json_decode($json);
 
-        // file_put_contents('/tmp/object.txt', print_r($object, true));
+        foreach ($object->FISalesClosed as $key => $recordObj)
+            $object->FISalesClosed[$key]->DealerId = $request->input('dealerID');
 
-        /*$object->dealerID = $request->input('dealerID');
         $json = json_encode($object);*/
 
         return view('sales', ['result' => $json, 'dealerIDs' => $dealers]);

@@ -35,6 +35,14 @@ class ServiceController extends Controller
                 ]
             ]);
         } catch (RequestException $e) {
+            $response = '';
+
+            if ($e->hasResponse())
+                $response = Psr7\str($e->getResponse());
+
+            $errorMessage = "Request: " .Psr7\str($e->getRequest()) . ' Response: ' . $response;
+            error_log($errorMessage);
+            
             return view('service', ['result' => json_encode([]), 'dealerIDs' => $dealers]);
         }
 
