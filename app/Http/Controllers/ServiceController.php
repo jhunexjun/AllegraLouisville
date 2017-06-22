@@ -9,8 +9,15 @@ use GuzzleHttp\Exception\RequestException;
 
 class ServiceController extends Controller
 {
+    private $url = '';
+
     public function __construct() {
         $this->middleware('auth');
+
+        if (\App::environment(['local', 'staging']))
+            $this->url = 'https://uat-3pa.dmotorworks.com/pip-extract/servicesalesclosedext/extract';
+        else
+            $this->url = 'https://3pa.dmotorworks.com/pip-extract/servicesalesclosedext/extract';
     }
 
     public function getServiceData(Request $request) {
@@ -25,7 +32,7 @@ class ServiceController extends Controller
         $client = new \GuzzleHttp\Client();
         
         try {
-            $res = $client->request('POST', 'https://uat-3pa.dmotorworks.com/pip-extract/servicesalesclosedext/extract', [
+            $res = $client->request('POST', $this->url, [
                 'auth' => [config('app.dms_username'), config('app.dms_password')],
                 'form_params' => [
                     'qparamStartDate' => $serviceStartDate,
@@ -42,7 +49,7 @@ class ServiceController extends Controller
 
             $errorMessage = "Request: " .Psr7\str($e->getRequest()) . ' Response: ' . $response;
             error_log($errorMessage);
-            
+
             return view('service', ['result' => json_encode([]), 'dealerIDs' => $dealers]);
         }
 
